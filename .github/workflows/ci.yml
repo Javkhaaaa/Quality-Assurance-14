@@ -5,6 +5,7 @@ on:
     branches:
       - develop
       - 'release/*'
+      - main
   pull_request:
     branches:
       - develop
@@ -15,16 +16,42 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Код Checkout Хийх
+        uses: actions/checkout@v4
+      
       - name: JDK 17 Тохируулах
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
+          cache: maven
+      
+      - name: Maven Dependencies Татаж Авах
+        run: mvn dependency:resolve
+      
+      - name: Код Compile Хийх
+        run: mvn clean compile
+      
       - name: Checkstyle Шалгах
         run: mvn checkstyle:check
-      - name: JUnit Тест ба JaCoCo Coverage Шалгах
-        run: mvn test jacoco:check
-      - name: JaCoCo Тайлан Үүсгэх
+        continue-on-error: false
+      
+      - name: JUnit Тест Ажиллуулах
+        run: mvn test
+        continue-on-error: false
+      
+      - name: JaCoCo Coverage Тайлан Үүсгэх
         run: mvn jacoco:report
-
+        continue-on-error: false
+      
+      - name: JaCoCo 100% Branch Coverage Шалгах
+        run: mvn jacoco:check
+        continue-on-error: false
+      
+      - name: Coverage Тайлан Хадгалах
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
+          retention-days: 7
