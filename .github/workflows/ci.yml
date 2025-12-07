@@ -2,22 +2,15 @@ name: CI Процесс
 
 on:
   push:
-    branches:
-      - develop
-      - 'release/*'
-      - main
+    branches: [develop, main, 'release/*']
   pull_request:
-    branches:
-      - develop
-      - 'release/*'
-      - main
+    branches: [develop, main, 'release/*']
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Код Checkout Хийх
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       
       - name: JDK 17 Тохируулах
         uses: actions/setup-java@v4
@@ -26,25 +19,5 @@ jobs:
           distribution: 'temurin'
           cache: maven
       
-      - name: Код Compile Хийх
-        run: mvn clean compile -q
-      
-      - name: Checkstyle Шалгах
-        run: mvn checkstyle:check
-      
-      - name: JUnit Тест Ажиллуулах
-        run: mvn test
-      
-      - name: JaCoCo Coverage Тайлан Үүсгэх
-        run: mvn jacoco:report
-      
-      - name: JaCoCo 100% Branch Coverage Шалгах
-        run: mvn verify
-      
-      - name: Coverage Тайлан Хадгалах
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: jacoco-report
-          path: target/site/jacoco/
-          retention-days: 7
+      - name: Checkstyle, Тест, Coverage Шалгах
+        run: mvn clean verify
