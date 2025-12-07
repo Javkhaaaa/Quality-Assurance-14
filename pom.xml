@@ -80,7 +80,7 @@
                         <configuration>
                             <rules>
                                 <rule>
-                                    <element>BRANCH</element>
+                                    <element>CLASS</element>
                                     <limits>
                                         <limit>
                                             <counter>BRANCH</counter>
