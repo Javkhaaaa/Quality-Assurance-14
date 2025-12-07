@@ -26,27 +26,20 @@ jobs:
           distribution: 'temurin'
           cache: maven
       
-      - name: Maven Dependencies Татаж Авах
-        run: mvn dependency:resolve
-      
       - name: Код Compile Хийх
-        run: mvn clean compile
+        run: mvn clean compile -q
       
       - name: Checkstyle Шалгах
         run: mvn checkstyle:check
-        continue-on-error: false
       
       - name: JUnit Тест Ажиллуулах
         run: mvn test
-        continue-on-error: false
       
       - name: JaCoCo Coverage Тайлан Үүсгэх
         run: mvn jacoco:report
-        continue-on-error: false
       
       - name: JaCoCo 100% Branch Coverage Шалгах
-        run: mvn jacoco:check
-        continue-on-error: false
+        run: mvn verify
       
       - name: Coverage Тайлан Хадгалах
         uses: actions/upload-artifact@v4
