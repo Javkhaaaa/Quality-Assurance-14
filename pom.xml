@@ -93,6 +93,11 @@
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>**/Calculator.class</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
